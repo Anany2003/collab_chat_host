@@ -100,8 +100,26 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-  res.clearCookie("jwt");
-  res.status(200).json({ success: true, message: "Logout successful" });
+  try {
+    const cookieOptions = {
+      httpOnly: true,
+      sameSite: "strict", // Default for local
+      secure: process.env.NODE_ENV === "production",
+    };
+
+    // For cross-domain deployment (Render), we MUST use sameSite: "none"
+    if (process.env.NODE_ENV === "production") {
+      cookieOptions.sameSite = "none";
+    }
+
+    // Pass the options to clearCookie
+    res.clearCookie("jwt", cookieOptions);
+    res.status(200).json({ success: true, message: "Logout successful" });
+    
+  } catch (error) {
+    console.log("Error in logout controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 export async function onboard(req, res) {
