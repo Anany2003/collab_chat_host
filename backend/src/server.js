@@ -14,12 +14,16 @@ const app = express();
 const PORT = process.env.PORT;
 
 const __dirname = path.resolve();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://my-chat-app.onrender.com" // <-- ADD YOUR RENDER FRONTEND URL
+];
 
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true, // allow frontend to send cookies
-  })
+  cors({
+    origin: allowedOrigins, // Use the array here
+    credentials: true, 
+  })
 );
 
 app.use(express.json());
@@ -29,7 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV !== "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (req, res) => {
