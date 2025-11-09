@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 const __dirname = path.resolve();
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://my-chat-app.onrender.com" // <-- ADD YOUR RENDER FRONTEND URL
+  "https://collab-chat-frontend.onrender.com" // <-- ADD YOUR RENDER FRONTEND URL
 ];
 
 app.use(
